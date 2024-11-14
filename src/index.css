@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .bg-diagonal-stripes {
+    background-color: #81b6a4;
+    background-image: linear-gradient(45deg, white 2px, transparent 2px);
+    background-size: calc(100% / 15) calc(100% / 15);
+  }
+
+  .diagonal-square {
+    background: linear-gradient(-135deg, #FFC83E 30%, white 60%);
+  }
+}
+
+.focus\:ring-cyan-300:focus {
+  --tw-ring-opacity: 0 !important;
+}
+
+.event-img {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.category-card {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#dropwdown {
+  appearance: none;
+}
