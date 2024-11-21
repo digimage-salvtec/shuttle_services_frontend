@@ -26,6 +26,7 @@ import Booking from "./views/Booking.jsx";
 // components
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import MyBookings from "./views/MyBookings.jsx";
 
 const App = () => {
   const shoudRenderHeader = (pathname) =>
@@ -48,6 +49,7 @@ const App = () => {
         <Route path="/tripsearch" element={<TripSearch />} />
         <Route path="/passengers" element={<Passengers />} />
         <Route path="/booking" element={<Booking />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/trip/:trip" element={<Trip />} />
         <Route path="/support" element={<Support />} />
         <Route path="/become-a-partner" element={<PartnerPortal />} />

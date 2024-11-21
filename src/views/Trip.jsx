@@ -68,7 +68,7 @@ const Trip = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [passportNo, setPassportNo] = useState("");
-  const [passportExp, setPassportExp] = useState("");
+  const [passportExp, setPassportExp] = useState(new Date());
   const [extras, setExtras] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [passengerCount, setPassengerCount] = useState(1);
@@ -240,11 +240,11 @@ const Trip = () => {
 
       if (passengerCount > 1) {
         navigate(
-          `/passengers?reservation=${reservationData.id}&trip=${tripData.id}&trip_ref=${tripData.trip_reference}&paymentmethod=${selectedOption}&passengers=${passengerCount}&shuttle=${tripData?.shuttle.id}`
+          `/passengers?reservation=${reservationData.id}&trip=${tripData.id}&trip_ref=${tripData.trip_reference}&paymentmethod=${selectedOption}&cellNumber=${phone}&passengers=${passengerCount}&shuttle=${tripData?.shuttle.id}`
         );
       } else {
         navigate(
-          `/booking?reservation=${reservationData.id}&trip=${tripData.id}&trip_ref=${tripData.trip_reference}&paymentmethod=${selectedOption}&passengers=${passengerCount}&shuttle=${tripData?.shuttle.id}`
+          `/booking?reservation=${reservationData.id}&trip=${tripData.id}&trip_ref=${tripData.trip_reference}&paymentmethod=${selectedOption}&cellNumber=${phone}&passengers=${passengerCount}&shuttle=${tripData?.shuttle.id}`
         );
       }
     } catch (err) {
@@ -289,7 +289,7 @@ const Trip = () => {
                 fill="currentFill"
               />
             </svg>
-            <span className="ml-4 text-sm text-primary text-2xl">
+            <span className="ml-4 text-primary text-lg">
               Setting up your trip...
             </span>
             <span className="sr-only">Setting up your trip...</span>
@@ -329,10 +329,7 @@ const Trip = () => {
 
           <div className="mb-4 bg-primary">
             <div className="flex items-center justify-between py-4 max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
-              <p className="bg-accent rounded-full text-sm border-2 border-accent pr-2">
-                <span className="bg-primary px-2 mr-2 rounded-full text-white">
-                  Trip {tripData.trip_reference}{" "}
-                </span>{" "}
+              <p className="bg-accent rounded-full text-sm border-2 border-accent px-2">
                 One Way
               </p>
               <ShareButton />
@@ -400,6 +397,11 @@ const Trip = () => {
                   </Link>
                 </div>
 
+                <span className="bg-alt bg-opacity-30 border-l-4 border-red-500 inline-block px-3 py-1 text-xs text-gray-700 mt-1 mb-4">
+                  We will use provided phone number for MoMo payments. Please make sure
+                  it's registered, & correct
+                </span>
+
                 <div className="flex flex-col sm:flex-row items-center gap-2 w-full mb-4">
                   <label htmlFor="firstname" className="flex flex-col w-full">
                     First name
@@ -435,7 +437,7 @@ const Trip = () => {
                   </label>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-2 w-full mb-4">
+                <div className="flex flex-col sm:flex-row items-center gap-2 w-full">
                   <label htmlFor="email" className="flex flex-col w-full">
                     Email Address
                     <input
@@ -468,7 +470,7 @@ const Trip = () => {
                       </span>
                     )}
                   </label>
-                </div>
+                </div>                
 
                 <div className="flex flex-col sm:flex-row items-center gap-2 w-full mb-4">
                   <label
@@ -496,7 +498,7 @@ const Trip = () => {
                     <input
                       value={passportExp}
                       onChange={(e) => setPassportExp(e.target.value)}
-                      type="text"
+                      type="date"
                       id="passport-expiry"
                       placeholder="Passport expiry date"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"

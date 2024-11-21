@@ -22,15 +22,12 @@ const Login = () => {
     setIsSubmitting(true);
 
     let payload = {
-      username: username,
+      email: username,
       password: password,
     };
 
     try {
-      const { data } = await axios_client.post(
-        "/login",
-        JSON.stringify(payload)
-      );
+      const { data } = await axios_client.post("/user/login", payload);
 
       const response = dataDecode(data);
       console.log(response);

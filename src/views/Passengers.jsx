@@ -3,18 +3,24 @@ import Bottom from "../components/Bottom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import axios_client from "../axios_client";
 
 const Passengers = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
 
-  const reservation_id = params.get("reservation_id");
+  const reservation_id = params.get("reservation");
+  const paymentmethod_id = params.get("paymentmethod");
+  const shuttle_id = params.get("shuttle");
+  const cellNumber = params.get("cellNumber");
+  const numberOfPassengers = params.get("passengers");
   const trip_ref = params.get("trip_ref");
-  const number_of_passengers = params.get("number_of_passengers");
+  const trip_id = params.get("trip");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [passenger_count, setPassenger_count] = useState(1);
+  const [error, setError] = useState(false);
+  const [passengerCount, setPassengerCount] = useState(1);
   const [passengers, setPassengers] = useState([
     {
       firstname: "",
@@ -34,7 +40,7 @@ const Passengers = () => {
   };
 
   const handleAddPassenger = () => {
-    if (passenger_count < number_of_passengers) {
+    if (passengerCount < numberOfPassengers) {
       setPassengers((prev) => [
         ...prev,
         {
@@ -46,45 +52,55 @@ const Passengers = () => {
           passportExp: "",
         },
       ]);
-      setPassenger_count(passenger_count + 1);
+      setPassengerCount(passengerCount + 1);
     }
   };
 
   const handleRemovePassenger = (index) => {
     const updatedPassengers = passengers.filter((_, i) => i !== index);
     setPassengers(updatedPassengers);
-    setPassenger_count(passenger_count - 1);
+    setPassengerCount(passengerCount - 1);
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log("Passengers: ", passengers);
-    return;
     setIsSubmitting(true);
 
     const payload = {
-      reservation_id: reservation_id,
-      trip_id: trip_id,
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      phone: phone,
-      passport_no: passportNo,
-      passport_expiry: passportExp,
+      passengers: passengers.map((passenger) => ({
+        reservation_id: reservation_id,
+        trip_id: trip_id,
+        firstname: passenger.firstname,
+        lastname: passenger.lastname,
+        email: passenger.email,
+        phone: passenger.phone,
+        passport_no: passenger.passportNo,
+        passport_expiry: passenger.passportExp,
+      })),
     };
 
     try {
-      const { data } = await axios_client.post("/passengers", payload);
-      console.log(data);
+      const response = await axios_client.post("/passengers", payload);
+
+      if (response.status === 201) {
+        navigate(
+          `/booking?reservation=${reservation_id}&trip=${trip_id}&trip_ref=${trip_ref}&paymentmethod=${paymentmethod_id}&cellNumber=${cellNumber}&passengers=${numberOfPassengers}&shuttle=${shuttle_id}`
+        );
+      } else {
+        setError("Could not add passengers. Please try again...");
+      }
     } catch (err) {
       const error = err.response;
+      console.log(err);
 
       if (error.status === 422) {
         const validation_errors = error.data.errors;
         navigate(`/trip/${trip}`, { state: { validation_errors } }); // Redirect back with errors
       } else {
-        setError("Error adding passengers. Try again...");
+        setError("Could not add passengers. Please try again...");
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -93,6 +109,11 @@ const Passengers = () => {
       <Bottom />
       <div className="my-8 grid grid-cols-1 sm:grid-cols-3 auto-cols-fr gap-8">
         <div className="col-span-1 sm:col-span-2">
+          {error && (
+            <p className="border-l-2 border-alt px-4 py-2 bg-alt bg-opacity-70">
+              {error}
+            </p>
+          )}
           <h2 className="text-2xl text-primary font-semibold mb-1">
             Who are you travelling with?
           </h2>
@@ -109,6 +130,7 @@ const Passengers = () => {
                       value={passenger.firstname}
                       onChange={(e) => handlePassengerChange(index, e)}
                       type="text"
+                      name="firstname"
                       id={`firstname-${index}`}
                       placeholder="First name"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
@@ -122,6 +144,7 @@ const Passengers = () => {
                       value={passenger.lastname}
                       onChange={(e) => handlePassengerChange(index, e)}
                       type="text"
+                      name="lastname"
                       id={`lastname-${index}`}
                       placeholder="Last name"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
@@ -138,6 +161,7 @@ const Passengers = () => {
                       value={passenger.email}
                       onChange={(e) => handlePassengerChange(index, e)}
                       type="email"
+                      name="email"
                       id={`email-${index}`}
                       placeholder="Email address"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
@@ -151,6 +175,7 @@ const Passengers = () => {
                       value={passenger.phone}
                       onChange={(e) => handlePassengerChange(index, e)}
                       type="text"
+                      name="phone"
                       id={`phone-${index}`}
                       placeholder="Mobile phone number"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
@@ -167,6 +192,7 @@ const Passengers = () => {
                       value={passenger.passportNo}
                       onChange={(e) => handlePassengerChange(index, e)}
                       type="text"
+                      name="passportNo"
                       id={`passport-number-${index}`}
                       placeholder="Passport number"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
@@ -179,14 +205,15 @@ const Passengers = () => {
                     <input
                       value={passenger.passportExp}
                       onChange={(e) => handlePassengerChange(index, e)}
-                      type="text"
+                      type="date"
+                      name="passportExp"
                       id={`passport-expiry-${index}`}
                       placeholder="Passport expiry date"
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
                     />
                   </label>
                 </div>
-                {passengers.length >= number_of_passengers && (
+                {passengers.length >= numberOfPassengers && (
                   <button
                     className="my-2 flex items-center gap-2"
                     onClick={() => handleRemovePassenger(index)}>
@@ -199,7 +226,7 @@ const Passengers = () => {
                 )}
               </div>
             ))}
-            {passenger_count < number_of_passengers && (
+            {passengerCount < numberOfPassengers && (
               <button
                 className="my-4 flex items-center gap-2"
                 onClick={handleAddPassenger}>
@@ -232,7 +259,7 @@ const Passengers = () => {
               </tr>
               <tr className="odd:bg-gray-200 ">
                 <td className="p-3">No. of Passengers</td>
-                <td className="p-3">{number_of_passengers}</td>
+                <td className="p-3">{numberOfPassengers}</td>
               </tr>
             </tbody>
           </table>

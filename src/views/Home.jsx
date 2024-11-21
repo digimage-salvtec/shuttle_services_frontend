@@ -39,6 +39,9 @@ const Home = () => {
     try {
       const { data } = await axios_client.get("/trips");
       setTrips(data.data);
+
+      if(data.data.length <= 0)
+        setError('No Trips Found')
     } catch (err) {
       console.log(err);
       if (err.code === "ERR_NETWORK") setError("Network error");

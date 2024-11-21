@@ -21,12 +21,13 @@ const Trips = () => {
     try {
       const { data } = await axios_client.get("/trips");
       setTrips(data.data);
+      console.log(data.data);
     } catch (err) {
       const error = err.response;
 
       if (error.status === 422) {
         const validation_errors = error.data.errors;
-        navigate("/", { state: { validation_errors } }); // Redirect back with errors
+        navigate("/", { state: { validation_errors } });
       } else {
         setError("Couldn't load trips. Try again...");
       }

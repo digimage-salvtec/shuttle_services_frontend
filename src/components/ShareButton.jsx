@@ -10,7 +10,7 @@ const ShareButton = () => {
       // Use the Web Share API if available
       navigator
         .share({
-          title: "Checkout this quck and cheap trip on SwiftShuttle.com",
+          title: "Check out this quick and cheap trip on Swift Shuttle",
           url: tripLink,
         })
         .then(() => {
@@ -26,11 +26,9 @@ const ShareButton = () => {
 
       const whatsappUrl = `https://api.whatsapp.com/send?text=${message} ${encodedLink}`;
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`;
-      const instagramUrl = `https://www.instagram.com/?url=${encodedLink}`; // Note: Instagram doesn't support direct sharing of URLs, but this is how you can prompt users to share.
 
       window.open(whatsappUrl, "_blank");
       // window.open(facebookUrl, "_blank");
-      // window.open(instagramUrl, "_blank");
     }
   };
 

@@ -41,7 +41,7 @@ const SignUp = () => {
 
     try {
       const { data } = await axios_client.post(
-        "/bridgeReceiveRegistration.php",
+        "/signup",
         JSON.stringify(payload)
       );
 
@@ -141,7 +141,14 @@ const SignUp = () => {
           </div>
           <div className="text-sm my-3 w-full" htmlFor="phone">
             Date of Birth
-            <Datepicker />
+            <input
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              type="date"
+              id="passport-expiry"
+              placeholder="Passport expiry date"
+              className="w-full rounded-md border-2 border-accent"
+            />
           </div>
         </div>
 
