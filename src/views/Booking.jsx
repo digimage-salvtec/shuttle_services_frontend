@@ -43,9 +43,13 @@ const Booking = () => {
 
     try {
       const [reservationRes, paymentMethodRes, shuttleRes] = await Promise.all([
-        axios_client.get(`/reservations/${reservation_id}`),
-        axios_client.get(`/payment-methods/${paymentmethod_id}`),
-        axios_client.get(`/shuttles/${shuttle_id}`),
+        axios_client.get(
+          `/bridgeGetReservations.php?reservation_id=${reservation_id}`
+        ),
+        axios_client.get(
+          `/bridgeGetPaymentMethods.php?paymentmethods_id=${paymentmethod_id}`
+        ),
+        axios_client.get(`/bridgeGetShuttles.php?shuttle_id=${shuttle_id}`),
       ]);
 
       setState((prev) => ({
@@ -105,7 +109,10 @@ const Booking = () => {
     };
 
     try {
-      const response = await axios_client.post("/bookings", payload);
+      const response = await axios_client.post(
+        "/bridgeReceiveBooking.php",
+        payload
+      );
       const booking = response.data.data;
       setState((prev) => ({
         ...prev,

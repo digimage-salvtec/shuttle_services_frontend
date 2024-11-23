@@ -80,7 +80,7 @@ const Passengers = () => {
     };
 
     try {
-      const response = await axios_client.post("/passengers", payload);
+      const response = await axios_client.post("bridgeReceivePassanger.php", payload);
 
       if (response.status === 201) {
         navigate(

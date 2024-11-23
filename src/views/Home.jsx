@@ -37,7 +37,7 @@ const Home = () => {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await axios_client.get("/trips");
+      const { data } = await axios_client.get("/bridgeGetTrips.php");
       setTrips(data.data);
 
       if(data.data.length <= 0)

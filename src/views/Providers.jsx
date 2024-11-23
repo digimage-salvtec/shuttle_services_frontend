@@ -25,7 +25,7 @@ const Providers = () => {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await axios_client.get("/providers");
+      const { data } = await axios_client.get("/bridgeGetProviders.php");
       setProviders(data.data);
       console.log(providers)
     } catch (err) {

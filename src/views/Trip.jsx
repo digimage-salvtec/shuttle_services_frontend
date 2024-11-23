@@ -63,14 +63,14 @@ const Trip = () => {
   const [validationErrors, setValidationErrors] = useState({});
 
   // passenger information
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [passportNo, setPassportNo] = useState("");
+  const [firstname, setFirstname] = useState(null);
+  const [lastname, setLastname] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [passportNo, setPassportNo] = useState(null);
   const [passportExp, setPassportExp] = useState(new Date());
-  const [extras, setExtras] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [extras, setExtras] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [passengerCount, setPassengerCount] = useState(1);
   const [totalToPay, setTotalToPay] = useState(0);
 
@@ -138,7 +138,7 @@ const Trip = () => {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await axios_client.get("/payment-methods");
+      const { data } = await axios_client.get("/bridgeGetPaymentMethods.php");
       setPaymentMethods(data.data);
     } catch (err) {
       const error = err.response;
@@ -155,8 +155,12 @@ const Trip = () => {
   const getTrip = async () => {
     setIsLoading(true);
     setError("");
+
+    console.log(trip);
     try {
-      const { data } = await axios_client.get(`/trips/${trip}`);
+      const { data } = await axios_client.get(
+        `/bridgeGetTrips.php?trip_reference=${trip}`
+      );
       setTripData(data.data);
     } catch (err) {
       const error = err.response;
@@ -187,23 +191,30 @@ const Trip = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const payload = {
+    let payload = {
       phone: phone,
       email: email,
-      trip_id: tripData.id,
-      shuttle_id: tripData.shuttle.id,
-      provider_id: tripData.provider.id,
+      trip_id: JSON.stringify(tripData.id),
+      shuttle_id: JSON.stringify(tripData.shuttle.id),
+      provider_id: JSON.stringify(tripData.provider.id),
       pickupdate: tripData.pickupdate,
       seats_reserved: passengerCount,
       payment_method_id: selectedOption,
     };
+
+    payload = JSON.stringify(payload)
+    console.log(typeof payload)
+    // return
 
     const MAX_RETRIES = 3;
     let attempt = 0;
 
     const submitReservation = async () => {
       try {
-        const { data } = await axios_client.post("/reservations", payload);
+        const { data } = await axios_client.post(
+          "/bridgeReceiveReservation.php",
+          payload
+        );
         return data;
       } catch (err) {
         if (attempt < MAX_RETRIES) {
@@ -236,7 +247,10 @@ const Trip = () => {
         extras: extras,
       };
 
-      const { data } = await axios_client.post("/passengers", passenger);
+      const { data } = await axios_client.post(
+        "/bridgeReceivePassenger.php",
+        JSON.stringify(passenger)
+      );
 
       if (passengerCount > 1) {
         navigate(
@@ -398,8 +412,8 @@ const Trip = () => {
                 </div>
 
                 <span className="bg-alt bg-opacity-30 border-l-4 border-red-500 inline-block px-3 py-1 text-xs text-gray-700 mt-1 mb-4">
-                  We will use provided phone number for MoMo payments. Please make sure
-                  it's registered, & correct
+                  We will use provided phone number for MoMo payments. Please
+                  make sure it's registered, & correct
                 </span>
 
                 <div className="flex flex-col sm:flex-row items-center gap-2 w-full mb-4">
@@ -470,7 +484,7 @@ const Trip = () => {
                       </span>
                     )}
                   </label>
-                </div>                
+                </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-2 w-full mb-4">
                   <label

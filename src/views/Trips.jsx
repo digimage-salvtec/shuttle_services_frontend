@@ -19,7 +19,7 @@ const Trips = () => {
     setIsLoading(true);
     setError("");
     try {
-      const { data } = await axios_client.get("/trips");
+      const { data } = await axios_client.get("/bridgeGetTrips.php");
       setTrips(data.data);
       console.log(data.data);
     } catch (err) {

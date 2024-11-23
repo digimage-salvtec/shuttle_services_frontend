@@ -13,7 +13,6 @@ import SignUp from "./users/SignUp.jsx";
 import PasswordReset from "./users/PasswordReset.jsx";
 import UpdatePassword from "./users/UpdatePassword.jsx";
 import Profile from "./views/Profile.jsx";
-import Checkout from "./views/Checkout.jsx";
 import TripSearch from "./views/TripSearch.jsx";
 import Trip from "./views/Trip.jsx";
 import Support from "./views/Support.jsx";
@@ -53,7 +52,6 @@ const App = () => {
         <Route path="/trip/:trip" element={<Trip />} />
         <Route path="/support" element={<Support />} />
         <Route path="/become-a-partner" element={<PartnerPortal />} />
-        <Route path="/checkout" element={<Checkout />} />
         <Route element={<ProtectedLayout />}>
           <Route path="/profile" element={<Profile />} />
         </Route>

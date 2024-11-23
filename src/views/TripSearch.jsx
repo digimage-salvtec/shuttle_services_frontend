@@ -34,7 +34,7 @@ const TripSearch = () => {
     setError("");
     try {
       const { data } = await axios_client.get(
-        `/tripsearch?pickup=${pickupLocation}&dropoff=${dropoffLocation}&pickupdate=${pickupdate}`
+        `/bridgeTripSearch.php?pickup=${pickupLocation}&dropoff=${dropoffLocation}&pickupdate=${pickupdate}`
       );
       setTrips(data.data);
     } catch (err) {

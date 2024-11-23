@@ -56,7 +56,7 @@ const MyBookings = () => {
       try {
         const { data } = await axios_client.get(`/bookings/${bookingId}`);
         const bookingData = data.data;
-        console.log(bookingData);
+        
         setBooking(bookingData);
 
         // Stop polling if booking_status is 1 or 3
