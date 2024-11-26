@@ -5,24 +5,26 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Bottom from "../components/Bottom.jsx";
 
 const About = () => {
   return (
     <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
-      <div className="flex justify-between items-center">
-        <h3 className="text-sm sm:text-lg">Powered by Digimage (Pty) Ltd</h3>
+      <Bottom />
+      <div className="flex justify-between items-center mt-8">
+        <h3 className="text-sm sm:text-2xl font-bold">Powered by Digimage (Pty) Ltd</h3>
       </div>
       <hr className="h-px border-0 bg-accent my-1" />
 
       <div className="mt-6 ">
         <h4 className="text-sm sm:text-lg font-bold underline">Legal</h4>
         <p className="my-1 font-light text-xs sm:text-sm text-justify">
-          A private company with limited Liability, incorporated in the Kingdom
-          of eswatini
+          A private company with limited liability, incorporated in the Kingdom
+          of Eswatini
         </p>
       </div>
-      <hr className="h-px border-0 bg-accent my-4 w-1/2" />
-      <p className="my-1 font-light text-xs sm:text-sm text-justify">
+      <hr className="h-px border-0 bg-accent my-4 w-full sm:w-1/2" />
+      <p className="my-1 font-light text-xs sm:text-sm text-justify w-2/3">
         Our primary goal is customer satisfaction. If you have any suggestion
         on, are not satisfied, or you are displeased by the quality of the this
         product, we are always ready to assist accordingly. Reach out to us on
@@ -90,7 +92,7 @@ const About = () => {
         <a
           target="_blank"
           href="https://maps.app.goo.gl/wsL9rzwXUDNeRnET9"
-          className="w-full block py-2 mt-2 mb-4 bg-primary text-center rounded text-white cursor-pointer"
+          className="w-full sm:w-1/2 block p-4 my-4 mb-4 bg-primary text-center mx-auto text-white text-lg cursor-pointer"
           rel="noreferrer">
           Locate on Google Maps
         </a>

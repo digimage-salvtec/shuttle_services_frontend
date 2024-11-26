@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios_client from "../axios_client";
+import TimeConverter from "../components/TimeConverter";
+import Bottom from "../components/Bottom";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import TimeConverter from "../components/TimeConverter";
 import {
   faLocationArrow,
   faLocation,
@@ -14,7 +15,7 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { DateFormatter } from "../components/DateFormatter";
-import Bottom from "../components/Bottom";
+import { ReservationContext } from "../context/ReservationContext";
 
 // vehicles
 import bus from "../assets/vehicles/bus-illustration.png";
@@ -23,17 +24,11 @@ import sedan from "../assets/vehicles/sedan-illustration.png";
 import suv from "../assets/vehicles/suv-illustration.png";
 import family from "../assets/vehicles/7-seater-illustration.png";
 import ShareButton from "../components/ShareButton";
-import { ReservationContext } from "../context/ReservationContext";
 
 const Trip = () => {
   const { trip } = useParams();
-  const {
-    reservations,
-    addReservation,
-    removeReservation,
-    updateReservation,
-    getTotalCost,
-  } = useContext(ReservationContext);
+  const { addReservation, removeReservation, updateReservation } =
+    useContext(ReservationContext);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-SZ", {
@@ -63,14 +58,14 @@ const Trip = () => {
   const [validationErrors, setValidationErrors] = useState({});
 
   // passenger information
-  const [firstname, setFirstname] = useState(null);
-  const [lastname, setLastname] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [phone, setPhone] = useState(null);
-  const [passportNo, setPassportNo] = useState(null);
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [passportNo, setPassportNo] = useState("");
   const [passportExp, setPassportExp] = useState(new Date());
-  const [extras, setExtras] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [extras, setExtras] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
   const [passengerCount, setPassengerCount] = useState(1);
   const [totalToPay, setTotalToPay] = useState(0);
 
@@ -156,7 +151,6 @@ const Trip = () => {
     setIsLoading(true);
     setError("");
 
-    console.log(trip);
     try {
       const { data } = await axios_client.get(
         `/bridgeGetTrips.php?trip_reference=${trip}`
@@ -194,28 +188,30 @@ const Trip = () => {
     let payload = {
       phone: phone,
       email: email,
-      trip_id: JSON.stringify(tripData.id),
-      shuttle_id: JSON.stringify(tripData.shuttle.id),
-      provider_id: JSON.stringify(tripData.provider.id),
+      trip_id: tripData.id,
+      shuttle_id: tripData.shuttle.id,
+      provider_id: tripData.provider.id,
       pickupdate: tripData.pickupdate,
       seats_reserved: passengerCount,
-      payment_method_id: selectedOption,
+      payment_method_id: Number(selectedOption),
     };
 
-    payload = JSON.stringify(payload)
-    console.log(typeof payload)
-    // return
-
+    payload = JSON.stringify(payload);
     const MAX_RETRIES = 3;
     let attempt = 0;
 
     const submitReservation = async () => {
       try {
-        const { data } = await axios_client.post(
+        const response = await axios_client.post(
           "/bridgeReceiveReservation.php",
           payload
         );
-        return data;
+
+        if (response.message === "Server error")
+          setError(
+            "Opps! Please try that again. If problem persists, contact support, on (+268) 2404 0524"
+          );
+        else return response.data;
       } catch (err) {
         if (attempt < MAX_RETRIES) {
           attempt++;
@@ -226,14 +222,14 @@ const Trip = () => {
             const validationErrors = error.data.errors;
             navigate(`/trip/${trip}`, { state: { validationErrors } }); // Redirect back with errors
           } else {
-            setError("Error passengers. Try again...");
+            setError("Error adding passengers. Try again...");
           }
         }
       }
     };
 
     try {
-      const reservationData = await submitReservation();
+      let reservationData = await submitReservation();
 
       let passenger = {
         reservation_id: reservationData.id,
@@ -262,7 +258,6 @@ const Trip = () => {
         );
       }
     } catch (err) {
-      console.log(err);
       const error = err.response;
 
       if (error.status === 422) {
@@ -303,7 +298,7 @@ const Trip = () => {
                 fill="currentFill"
               />
             </svg>
-            <span className="ml-4 text-primary text-lg">
+            <span className="ml-4 text-primary text-sm sm:text-lg">
               Setting up your trip...
             </span>
             <span className="sr-only">Setting up your trip...</span>
@@ -397,7 +392,7 @@ const Trip = () => {
               </div>
 
               <form className="my-6" onSubmit={handleFormSubmit}>
-                <div className="mb-6 border-2 rounded-md px-3 py-1 flex flex-wrap items-start sm:items-center justify-between">
+                <div className="mb-6 border-2 rounded-md px-3 py-2 flex flex-wrap items-start sm:items-center justify-between">
                   <p className="w-1/2 sm:w-1/5 text-sm">
                     Already have an Account?
                   </p>
@@ -573,7 +568,11 @@ const Trip = () => {
                 <div className="flex items-center gap-2 w-full mb-4">
                   <button
                     disabled={isSubmitting}
-                    className="bg-primary text-center text-lg w-full p-4 text-white rounded-sm hover:bg-opacity-90">
+                    className={`text-center text-lg w-full p-4 rounded-sm ${
+                      isSubmitting
+                        ? "bg-gray-400 cursor-not-allowed" 
+                        : "bg-primary text-white hover:bg-opacity-90"
+                    }`}>
                     {isSubmitting ? (
                       <>
                         <FontAwesomeIcon

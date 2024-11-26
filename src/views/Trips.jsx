@@ -4,7 +4,10 @@ import axios_client from "../axios_client";
 import Trip from "../components/Trip";
 import Bottom from "../components/Bottom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpWideShort } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpWideShort,
+  faPlaneDeparture,
+} from "@fortawesome/free-solid-svg-icons";
 import Loading from "../components/Loading";
 import ShareButton from "../components/ShareButton";
 
@@ -21,7 +24,6 @@ const Trips = () => {
     try {
       const { data } = await axios_client.get("/bridgeGetTrips.php");
       setTrips(data.data);
-      console.log(data.data);
     } catch (err) {
       const error = err.response;
 
@@ -45,8 +47,9 @@ const Trips = () => {
       <Bottom />
       <div className="py-4 mt-6">
         <div className="relative max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto ">
-          <p className="text-center text-2xl text-primary">
-            Start Your Journey
+          <p className="text-center text-3xl text-primary font-bold">
+            Your Journey Starts Here! <br />
+            <FontAwesomeIcon icon={faPlaneDeparture} className="mt-4" />
           </p>
         </div>
       </div>

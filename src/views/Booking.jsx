@@ -6,7 +6,10 @@ import ConfirmModal from "../components/ConfirmModal";
 import axios_client from "../axios_client";
 import { DateFormatter } from "../components/DateFormatter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightLong,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Booking = () => {
   const location = useLocation();
@@ -35,6 +38,7 @@ const Booking = () => {
   const params = new URLSearchParams(location.search);
   const paymentmethod_id = params.get("paymentmethod");
   const reservation_id = params.get("reservation");
+  const trip_reference = params.get("trip_ref");
   const shuttle_id = params.get("shuttle");
   const cellNumber = params.get("cellNumber");
 
@@ -104,15 +108,17 @@ const Booking = () => {
       payment_amount: reservation.trip.trip_cost,
       service_charge: reservation.trip.service_charge,
       total_amount: totalToPay,
-      paymentmethod_id: paymentmethod_id,
+      paymentmethod_id: Number(paymentmethod_id),
       booking_status: 2,
     };
 
+    payload = JSON.stringify(payload);
     try {
       const response = await axios_client.post(
         "/bridgeReceiveBooking.php",
         payload
       );
+
       const booking = response.data.data;
       setState((prev) => ({
         ...prev,
@@ -121,7 +127,7 @@ const Booking = () => {
         loading: false,
       }));
 
-      if (response.status === 201) {
+      if (booking) {
         if (paymentmethod_id == 1) {
           window.open(gatewayLink, "_blank");
           navigate(`/my-bookings?bookingId=${booking.id}`);
@@ -134,15 +140,17 @@ const Booking = () => {
             paymentMethod: paymentmethod_id,
           };
 
+          payload = JSON.stringify(payload);
+
           try {
             const response = await axios_client.post(
               "https://www.epaynetsz.com/swift_bridge/bridgeReceiveBookingTransaction.php",
-              JSON.stringify(payload)
+              payload
             );
             console.log(response);
             navigate(`/my-bookings?bookingId=${booking.id}`);
           } catch (error) {
-            console.log(error);
+            console.log(error);            
           }
         }
       }
@@ -175,10 +183,9 @@ const Booking = () => {
   const totalToPay = reservation
     ? reservation.seats_reserved * reservation.trip.trip_cost
     : 0;
-  // const totalToPay = 0.01;
 
   let gatewayLink = `https://www.epaynetsz.com/ePayNetCart/gt00001.php?c=39303530&2c=37&3c=3132&tb=${totalToPay}&tn=${reservation?.reservation_no}`;
-  // let momoGateWay =
+
   return (
     <div className="my-4 max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
       <Bottom />
@@ -191,9 +198,10 @@ const Booking = () => {
         />
       )}
 
-      <p className="text-left sm:text-center text-primary text-2xl font-bold mt-4">
+      <p className="text-center text-primary text-2xl font-bold mt-4">
         Review Booking & Pay
       </p>
+      <hr className="my-4" />
 
       {loading ? (
         <div role="status" className="text-center my-20">
@@ -216,6 +224,25 @@ const Booking = () => {
             Preparing your booking...
           </span>
           <span className="sr-only">Preparing your booking...</span>
+        </div>
+      ) : !reservation ? (
+        <div className="text-center">
+          <FontAwesomeIcon
+            icon={faInfoCircle}
+            className="text-alt text-4xl my-4"
+          />
+          <p className="text-primary text-lg my-4">
+            We could not complete that process!
+          </p>
+          <a
+            className="px-4 py-3 bg-primary text-white text-lg block my-3 w-1/3 sm:w-1/5 m-auto"
+            href={`/trip/${trip_reference}`}>
+            Try Again
+          </a>
+          <em className="mt-20 block">
+            If problem persists, contact support on{" "}
+            <span className="font-bold">(+268) 2404 0524</span>{" "}
+          </em>
         </div>
       ) : (
         <div className="my-8 items-start grid grid-cols-1 sm:grid-cols-5 auto-cols-fr gap-8">
@@ -330,16 +357,18 @@ const Booking = () => {
               {loading ? "Processing..." : `Pay with ${paymentMethod?.name}`}
             </button>
 
-            <small className="text-xs text-center block">
-              Not registered with ePayNet?{" "}
-              <a
-                className="text-primary underline hover:text-gray-500"
-                href="https://www.epaynetsz.com/ePayNetWeb/"
-                target="_blank"
-                rel="noopener noreferrer">
-                Create Account Here
-              </a>
-            </small>
+            {paymentMethod?.name === "ePayNet" && (
+              <small className="text-xs text-center block">
+                Not registered with ePayNet?{" "}
+                <a
+                  className="text-primary underline hover:text-gray-500"
+                  href="https://www.epaynetsz.com/ePayNetWeb/"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Create Account Here
+                </a>
+              </small>
+            )}
           </div>
         </div>
       )}

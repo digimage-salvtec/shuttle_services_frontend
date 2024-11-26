@@ -54,9 +54,11 @@ const MyBookings = () => {
 
     const getBooking = async () => {
       try {
-        const { data } = await axios_client.get(`/bookings/${bookingId}`);
+        const { data } = await axios_client.get(
+          `/bridgeGetBookings.php?bookingId=${bookingId}`
+        );
         const bookingData = data.data;
-        
+
         setBooking(bookingData);
 
         // Stop polling if booking_status is 1 or 3
