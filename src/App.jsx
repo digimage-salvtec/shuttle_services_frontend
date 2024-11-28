@@ -26,6 +26,8 @@ import Booking from "./views/Booking.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import MyBookings from "./views/MyBookings.jsx";
+import Privacy from "./views/Privacy.jsx";
+import PrivacyNotice from "./components/PrivacyNotice.jsx";
 
 const App = () => {
   const shoudRenderHeader = (pathname) =>
@@ -34,6 +36,7 @@ const App = () => {
   return (
     <Router>
       <Header />
+      <PrivacyNotice />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -42,7 +45,7 @@ const App = () => {
         <Route path="/updatepassword" element={<UpdatePassword />} />
         <Route path="/about" element={<About />} />
         <Route path="/terms" element={<About />} />
-        <Route path="/privacy" element={<About />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/trips" element={<Trips />} />
         <Route path="/providers" element={<Providers />} />
         <Route path="/tripsearch" element={<TripSearch />} />

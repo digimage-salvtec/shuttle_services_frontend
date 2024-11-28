@@ -93,6 +93,7 @@ const Booking = () => {
     if (!reservation || !paymentMethod) return;
 
     setState((prev) => ({ ...prev, loading: true }));
+   
     const totalToPay = reservation.seats_reserved * reservation.trip.trip_cost;
 
     let payload = {
@@ -109,7 +110,7 @@ const Booking = () => {
       service_charge: reservation.trip.service_charge,
       total_amount: totalToPay,
       paymentmethod_id: Number(paymentmethod_id),
-      booking_status: 2,
+      booking_status: 1,
     };
 
     payload = JSON.stringify(payload);
@@ -133,6 +134,10 @@ const Booking = () => {
           navigate(`/my-bookings?bookingId=${booking.id}`);
         }
         if (paymentmethod_id == 2) {
+          setState((prev) => ({
+            ...prev,
+            loading: true,
+          }));
           let payload = {
             cartBalance: totalToPay,
             transactionNumber: reservation.reservation_no,
@@ -150,7 +155,12 @@ const Booking = () => {
             console.log(response);
             navigate(`/my-bookings?bookingId=${booking.id}`);
           } catch (error) {
-            console.log(error);            
+            console.log(error);
+          } finally {
+            setState((prev) => ({
+              ...prev,
+              loading: false,
+            }));
           }
         }
       }

@@ -63,8 +63,8 @@ const MyBookings = () => {
 
         // Stop polling if booking_status is 1 or 3
         if (
-          bookingData.booking_status === 1 ||
-          bookingData.booking_status === 3
+          bookingData?.booking_status === 2 ||
+          bookingData?.booking_status === 3
         ) {
           clearInterval(interval);
         }
@@ -77,7 +77,7 @@ const MyBookings = () => {
     };
 
     getBooking();
-    interval = setInterval(getBooking, 3000);
+    interval = setInterval(getBooking, 5000);
     return () => clearInterval(interval);
   }, [bookingId]);
 
@@ -85,16 +85,16 @@ const MyBookings = () => {
     if (booking) {
       switch (booking.booking_status) {
         case 1:
-          setMessage("Success...");
+          setMessage("Payment pending approval...");
           break;
         case 2:
-          setMessage("Payment pending approval...");
+          setMessage("Payment succesfully completed");
           break;
         case 3:
           setMessage("Payment failed. Try again...");
           break;
         default:
-          setMessage("");
+          setMessage("Something went wrong. Please try aain...");
           break;
       }
     }
@@ -141,7 +141,7 @@ const MyBookings = () => {
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      ) : booking?.booking_status === 1 ? (
+      ) : booking?.booking_status === 2 ? (
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 auto-cols-fr gap-8">
           <div
             id="booking-container"

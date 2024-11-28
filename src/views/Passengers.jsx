@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Bottom from "../components/Bottom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightLong, faMinus, faPlus, faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios_client from "../axios_client";
 
 const Passengers = () => {
@@ -66,7 +66,7 @@ const Passengers = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const payload = {
+    let payload = {
       passengers: passengers.map((passenger) => ({
         reservation_id: reservation_id,
         trip_id: trip_id,
@@ -79,10 +79,15 @@ const Passengers = () => {
       })),
     };
 
-    try {
-      const response = await axios_client.post("bridgeReceivePassanger.php", payload);
+    payload = JSON.stringify(payload);
 
-      if (response.status === 201) {
+    try {
+      const response = await axios_client.post(
+        "bridgeReceivePassenger.php",
+        payload
+      );
+
+      if (response.data.data) {
         navigate(
           `/booking?reservation=${reservation_id}&trip=${trip_id}&trip_ref=${trip_ref}&paymentmethod=${paymentmethod_id}&cellNumber=${cellNumber}&passengers=${numberOfPassengers}&shuttle=${shuttle_id}`
         );
@@ -237,13 +242,28 @@ const Passengers = () => {
                 <span className="text-[11px]">Add new entry</span>
               </button>
             )}
-            <div className="flex items-center gap-2 w-full mb-4">
-              <button
-                disabled={isSubmitting}
-                className="bg-primary text-center text-lg w-full p-4 text-white rounded-sm hover:bg-opacity-90">
-                {isSubmitting ? "Adding passengers..." : "Submit & Proceed"}
-              </button>
-            </div>
+            <button
+              disabled={isSubmitting}
+              className={`text-center text-lg w-full p-4 rounded-sm ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-primary text-white hover:bg-opacity-90"
+              }`}>
+              {isSubmitting ? (
+                <>
+                  <FontAwesomeIcon
+                    className="mr-3 animate-spin"
+                    icon={faSpinner}
+                  />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Submit & Proceed
+                  <FontAwesomeIcon className="ml-3" icon={faArrowRightLong} />
+                </>
+              )}
+            </button>
           </form>
         </div>
         <div className="col-span-1 sm:col-span-1 bg-accent rounded-lg p-4 mt-8">
