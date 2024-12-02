@@ -93,8 +93,9 @@ const Booking = () => {
     if (!reservation || !paymentMethod) return;
 
     setState((prev) => ({ ...prev, loading: true }));
-   
-    const totalToPay = reservation.seats_reserved * reservation.trip.trip_cost;
+
+    // const totalToPay = reservation.seats_reserved * reservation.trip.trip_cost;
+    const totalToPay = 0.01;
 
     let payload = {
       shuttle_id: reservation.shuttle_id,
@@ -190,9 +191,10 @@ const Booking = () => {
     message,
   } = state;
 
-  const totalToPay = reservation
-    ? reservation.seats_reserved * reservation.trip.trip_cost
-    : 0;
+  // const totalToPay = reservation
+  //   ? reservation.seats_reserved * reservation.trip.trip_cost
+  //   : 0;
+  const totalToPay = 0.01;
 
   let gatewayLink = `https://www.epaynetsz.com/ePayNetCart/gt00001.php?c=39303530&2c=37&3c=3132&tb=${totalToPay}&tn=${reservation?.reservation_no}`;
 

@@ -94,7 +94,7 @@ const MyBookings = () => {
           setMessage("Payment failed. Try again...");
           break;
         default:
-          setMessage("Something went wrong. Please try aain...");
+          setIsLoading(true);
           break;
       }
     }
