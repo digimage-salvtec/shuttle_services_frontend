@@ -10,7 +10,7 @@ const ShareButton = () => {
       // Use the Web Share API if available
       navigator
         .share({
-          title: "Check out this quick and cheap trip on Swift Shuttle",
+          title: "Check out this quick and cheap trip on Swift Bookings",
           url: tripLink,
         })
         .then(() => {
@@ -22,7 +22,7 @@ const ShareButton = () => {
     } else {
       // Fallback for specific apps
       const encodedLink = encodeURIComponent(tripLink);
-      const message = "Check out this quick and cheap trip on Swift Shuttle";
+      const message = "Check out this quick and cheap trip on Swift Bookings";
 
       const whatsappUrl = `https://api.whatsapp.com/send?text=${message} ${encodedLink}`;
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`;

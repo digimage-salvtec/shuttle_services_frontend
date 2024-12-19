@@ -7,13 +7,13 @@ const Privacy = () => {
       <Bottom />
       <div className="my-6">
         <h1 className="text-primary font-bold text-2xl">
-          Swift Shuttle Privacy Statement
+          Swift Bookings Privacy Statement
         </h1>
         <p className="my-4 w-full sm:w-2/3 font-light">
-          This privacy statement describes how Swift Shuttle collects, uses, and
-          shares personal data about individuals in the Kingdom of Eswatini. We
-          use your personal data to provide and improve the service. By using
-          the Swift Shuttle, you agree to the collection and use of information
+          This privacy statement describes how Swift Bookings collects, uses,
+          and shares personal data about individuals in the Kingdom of Eswatini.
+          We use your personal data to provide and improve the service. By using
+          the Swift Bookings, you agree to the collection and use of information
           in accordance with this Privacy Policy.
         </p>
       </div>
@@ -31,9 +31,9 @@ const Privacy = () => {
         </p>
         <p className="my-4 w-full sm:w-2/3 font-light">
           “Trip Service” refers to the online purchase, order, (facilitated)
-          payment, or reservation service as offered or enabled by Swift Shuttle
-          in regards to various products and services as from time to time made
-          available by shuttle Providers on the platform
+          payment, or reservation service as offered or enabled by Swift
+          Bookings in regards to various products and services as from time to
+          time made available by shuttle Providers on the platform
         </p>
         <p className="my-4 w-full sm:w-2/3 font-light">
           “Trip Reservation” refers to the order, purchase, payment, booking, or
@@ -110,7 +110,7 @@ const Privacy = () => {
           We may use or disclose the personal data we collect for one or more of
           the following business purposes: <br />
           (1) As a financial service provider we may disclose information which
-          Swift Shuttle holds or otherwise processes where such information
+          Swift Bookings holds or otherwise processes where such information
           consists solely of information sourced from you as a user to Eswatini
           Financial Intelligence Unit (EFIU) as per the regulatory requirement
           to report suspicious transaction. <br />
@@ -142,12 +142,12 @@ const Privacy = () => {
           describes the purpose and requires the third party to both keep that
           personal data confidential and secure and not use it for any purpose
           except performing the contract. There are different parties integrated
-          into Swift Shuttle, in various ways and for various reasons. The
+          into Swift Bookings, in various ways and for various reasons. The
           primary reason we share your data is to provide the Trip Provider with
           the relevant info to complete your shuttle Reservation. We also share
           personal data for the following reasons: Disclosure for legal reasons
-          or as necessary to protect Swift Shuttle, its users and others. We may
-          release personal data to third parties: <br />
+          or as necessary to protect Swift Bookings, its users and others. We
+          may release personal data to third parties: <br />
           (1) to comply with valid legal requirements such as a law, regulation,
           search warrant, court order, or other legal process; <br />
           (2) cases in which we believe it is reasonably necessary to
@@ -195,12 +195,12 @@ const Privacy = () => {
           describes the purpose and requires the third party to both keep that
           personal data confidential and secure and not use it for any purpose
           except performing the contract. There are different parties integrated
-          into Swift Shuttle, in various ways and for various reasons. The
+          into Swift Bookings, in various ways and for various reasons. The
           primary reason we share your data is to provide the Trip Provider with
           the relevant info to complete your shuttle Reservation. We also share
           personal data for the following reasons: Disclosure for legal reasons
-          or as necessary to protect Swift Shuttle, its users and others. We may
-          release personal data to third parties: <br />
+          or as necessary to protect Swift Bookings, its users and others. We
+          may release personal data to third parties: <br />
           (1) to comply with valid legal requirements such as a law, regulation,
           search warrant, court order, or other legal process; <br />
           (2) cases in which we believe it is reasonably necessary to
@@ -220,7 +220,7 @@ const Privacy = () => {
         However, no data transmission or storage can be guaranteed to be 100%
         secure. As a result, while we strive to protect the personal data we
         maintain, we cannot ensure or warrant the security of any information
-        that you transmit to us. Swift Shuttle complies with applicable data
+        that you transmit to us. Swift Bookings complies with applicable data
         protection laws, including security breach notification laws. Our system
         will also notify you via email/SMS whenever there is a request for
         information by anyone to strengthen our data security.
@@ -251,14 +251,14 @@ const Privacy = () => {
       </h2>
       <p className="my-4 w-full sm:w-2/3 font-light">
         Pursuant to the CCA 2016, Users have the right to submit the following
-        requests to Swift Shuttle. To submit these requests, please call our
+        requests to Swift Bookings. To submit these requests, please call our
         Customer Care team at (+268) 2404 0524, or email
         <a href="mailto:helpdesk@salvtec.co.sz">helpdesk@salvtec.co.sz</a> (our
-        regular business hours of 08:800 - 17:00, Mon - Fri).
+        regular business hours of 08:00 - 17:00, Mon - Fri).
       </p>
 
       <h2 className="text-gray-500 text-lg font-bold underline">
-        Swift Shuttle will not:
+        Swift Bookings will not:
       </h2>
       <ul className="font-light list-disc ml-12">
         <li>Deny you goods or services</li>
@@ -273,10 +273,10 @@ const Privacy = () => {
       </h2>
       <p className="my-4 w-full sm:w-2/3 font-light">
         Pursuant to the CCA 2016, Users have the right to submit the following
-        requests to Swift Shuttle. To submit these requests, please call our
-        Customer Care team at (+268) 2404 0524, or email
+        requests to Swift Bookings. To submit these requests, please call our
+        Customer Care team at (+268) 2404 0524, or send an email to 
         <a href="mailto:helpdesk@salvtec.co.sz">helpdesk@salvtec.co.sz</a> (our
-        regular business hours of 08:800 - 17:00, Mon - Fri).
+        regular business hours of 08:00 - 17:00, Mon - Fri).
       </p>
       <h2 className="text-gray-500 text-lg font-bold underline my-4">
         Contact Us
@@ -284,7 +284,7 @@ const Privacy = () => {
       <p className="my-4 w-full sm:w-2/3 font-light">
         If you have questions or comments about this privacy statement, please
         write to the Compliance Officer, Digimage, Mbandzeni House, Karl Grant
-        Road. Please reference “Swift Shuttle Privacy Statement,” when
+        Road. Please reference “Swift Bookings Privacy Statement” when
         contacting us about this privacy statement.
       </p>
     </div>

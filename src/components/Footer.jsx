@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import main_logo from "../assets/logo/swift_shuttle_logo_main.svg";
+import main_logo from "../assets/logo/swift_shuttle_logotype_rgb.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="flex flex-col sm:flex-row items-start justify-between gap-2 w-full max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
         <div className="logo-container">
           <div className="mb-2 flex  items-center gap-4">
-            <img src={main_logo} alt="swift shuttle logo" className="w-16" />
+            <img src={main_logo} alt="Swift Bookings logo" className="w-16" />
             <a href="mailto:digimage@salvtec.co.sz">
               <FontAwesomeIcon className="text-gray-200" icon={faEnvelope} />
             </a>
@@ -22,14 +22,15 @@ const Footer = () => {
               to="/privacy">
               Privacy Policy
             </Link>
-            <Link
+            <a
+              target="_blank"
               className="font-light text-sm underline text-gray-100"
-              to="/terms">
+              href="/swift_bookings_terms_of_use.pdf">
               Terms of Service
-            </Link>            
+            </a>
           </div>
           <p className="font-light text-sm">
-            &copy; {date.getFullYear()} Swift Shuttle. Powered by{" "}
+            &copy; {date.getFullYear()} Swift Bookings. Powered by{" "}
             <a
               className="underline"
               href="https://salvtec.co.sz"
@@ -44,11 +45,6 @@ const Footer = () => {
               className="font-light text-left text-sm underline text-gray-100"
               to="/about">
               About Us
-            </Link>
-            <Link
-              className="font-light text-left text-sm underline text-gray-100"
-              to="/knowledge-base">
-              FAQs
             </Link>
             <Link
               className="font-light text-left text-sm underline text-gray-100"

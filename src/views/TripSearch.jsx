@@ -6,6 +6,8 @@ import Bottom from "../components/Bottom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpWideShort,
+  faInfo,
+  faInfoCircle,
   faLocation,
   faLocationArrow,
   faLocationPin,
@@ -36,15 +38,35 @@ const TripSearch = () => {
       const { data } = await axios_client.get(
         `/bridgeTripSearch.php?pickup=${pickupLocation}&dropoff=${dropoffLocation}&pickupdate=${pickupdate}`
       );
-      setTrips(data.data);
-    } catch (err) {
-      const error = err.response;
 
-      if (error.status === 422) {
-        const validation_errors = error.data.errors;
-        navigate("/", { state: { validation_errors } }); // Redirect back with errors
+      if (data.data) {
+        if (data.data.length > 0) {
+          setTrips(data.data);
+        } else {
+          setError(
+            "We don't have trips to that destination, yet. Please try again later..."
+          );
+        }
       } else {
-        setError("Couldn't load trips. Try again...");
+        if (data.errors) {
+          const validation_errors = data.errors;
+          navigate("/", { state: { validation_errors } }); // Redirect back with errors
+        } else {
+          setError("Couldn't load trips. Try again...");
+        }
+      }
+    } catch (err) {
+      if (err.response) {
+        const error = err.response;
+        if (error.status === 422) {
+          const validation_errors = error.data.errors;
+          navigate("/", { state: { validation_errors } }); // Redirect back with errors
+        } else {
+          setError("Couldn't load trips. Try again...");
+        }
+      } else {
+        console.error("Unexpected error:", err);
+        setError("Couldn't load trips. Please check your network connection.");
       }
     } finally {
       setIsLoading(false);
@@ -106,7 +128,10 @@ const TripSearch = () => {
       ) : error ? (
         <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
           <Bottom />
-          <h1 className="mt-4">{error}</h1>
+          <div className="mt-4 text-center">
+            <FontAwesomeIcon icon={faInfoCircle} className="text-5xl mb-6 text-alt"/>
+            <p className="text-center my-4 text-2xl font-light">{error}</p>
+          </div>
         </div>
       ) : (
         <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
@@ -114,7 +139,7 @@ const TripSearch = () => {
             Results include related trips...
           </span>
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 auto-cols-fr gap-8">
-            {trips.length > 0 &&
+            {trips?.length > 0 &&
               trips.map((trip, index) => <Trip key={index} trip={trip} />)}
           </div>
         </div>

@@ -1,25 +1,28 @@
 import React, { useState } from "react";
-import logo from "../assets/logo/swift_shuttle_logo_main.png";
+import logo from "../assets/logo/swift_shuttle_logotype_rgb.png";
 import Bottom from "../components/Bottom.jsx";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useStateContext } from "../context/ContextProvider";
 import axios_client from "../axios_client";
-import { Datepicker } from "flowbite-react";
+import { faArrowRightLong, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStateContext } from "../context/ContextProvider.jsx";
 
 const SignUp = () => {
-  const { setUser, setToken, dataDecode } = useStateContext();
-
+  const { user, setUser, token, setToken } = useStateContext();
+  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [cellNumber, setCellNumber] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
+  const [passportNo, setPassportNo] = useState("");
+  const [passportExp, setPassportExp] = useState(new Date());
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [plainPassword, setPlainPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,31 +32,38 @@ const SignUp = () => {
     setIsSubmitting(true);
 
     let payload = {
-      firstName: firstName,
-      lastName: lastName,
+      firstname: firstName,
+      lastname: lastName,
       email: email,
-      cellNumber: cellNumber,
+      phone: phone,
       gender: gender,
-      dateOfBirth: dateOfBirth,
-      plainPassword: plainPassword,
-      confirmPassword: confirmPassword,
+      passport_no: passportNo,
+      passport_exp: passportExp,
+      date_of_birth: dateOfBirth,
+      password: plainPassword,
+      password_confirmation: confirmPassword,
     };
+
+    payload = JSON.stringify(payload);
 
     try {
       const { data } = await axios_client.post(
-        "/signup",
-        JSON.stringify(payload)
+        "/bridgeReceiveUserRegistration.php",
+        payload
       );
 
-      const response = dataDecode(data);
+      if (data.errors) {
+        setValidationErrors(data.errors);
+        return;
+      }
 
-      if (response.response === "200") {
-        setUser(response.userDetails);
-        setToken(response.userToken);
+      setUser(data.user);
+      setToken(data.token);
 
-        navigate("/profile");
+      if (location.state?.from) {
+        navigate(location.state.from);
       } else {
-        setErrorMessage(response.message);
+        navigate("/profile");
       }
     } catch (err) {
       console.log(err);
@@ -64,157 +74,233 @@ const SignUp = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-2xl mx-auto">
       <Bottom />
-      <div className="max-w-44 mx-auto mt-12 bg-primary p-6 rounded">
-        <a href="/">
-          <img className="w-full" src={logo} alt="swift shuttle main logo" />
-        </a>
-      </div>
 
-      {errorMessage && (
-        <small className="text-primary block my-3 text-center bg-alt p-2">
-          {errorMessage}
-        </small>
-      )}
-
-      <form
-        onSubmit={handleSubmit}
-        className="border border-accent rounded-lg px-3 sm:px-6 py-4 my-6">
-        <h3 className="text-sm sm:text-2xl text-center text-primary mb-6 font-bold">
-          Create an Account
+      <form className="my-6" onSubmit={handleSubmit}>
+        <h3 className="text-2xl text-center text-primary mb-3 font-bold">
+          Create an account
         </h3>
+        <hr />
 
-        <div className="flex flex-col sm:flex-row sm:gap-4">
-          <div className="text-sm my-3 w-full" htmlFor="firstname">
+        <span className="bg-primary bg-opacity-30 border-l-4 border-primary inline-block px-3 py-1 text-xs text-gray-700 mt-2 mb-4">
+          We will use registered phone number for MoMo & ePayNet payments.
+          Please make sure it's registered, & correct
+        </span>
+
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full my-2">
+          <label htmlFor="firstname" className="flex flex-col w-full">
             First name
             <input
-              type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full rounded-md border-2 border-accent"
+              type="text"
+              id="firstname"
+              placeholder="First name"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
-
-          <div className="text-sm my-3 w-full" htmlFor="lastname">
+            {validationErrors.firstname && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.firstname}
+              </span>
+            )}
+          </label>
+          <label htmlFor="lastname" className="flex flex-col w-full">
             Last name
             <input
-              type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full rounded-md border-2 border-accent"
+              type="text"
+              id="lastname"
+              placeholder="Last name"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
+            {validationErrors.lastname && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.lastname}
+              </span>
+            )}
+          </label>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:gap-4">
-          <div className="text-sm my-3 w-full" htmlFor="email">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full my-2">
+          <label htmlFor="email" className="flex flex-col w-full">
             Email Address
             <input
-              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border-2 border-accent"
+              type="email"
+              id="email"
+              placeholder="Email address"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
-          <div className="text-sm my-3 w-full" htmlFor="phone">
-            Cell Number
+            {validationErrors.email && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.email}
+              </span>
+            )}
+          </label>
+          <label htmlFor="phone" className="flex flex-col w-full">
+            Mobile phone number
             <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               type="text"
-              value={cellNumber}
-              onChange={(e) => setCellNumber(e.target.value)}
-              className="w-full rounded-md border-2 border-accent"
+              id="phone"
+              placeholder="Mobile phone number"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
+            {validationErrors.phone && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.phone}
+              </span>
+            )}
+          </label>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:gap-4">
-          <div className="text-sm my-3 w-full" htmlFor="email">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full my-2">
+          <label htmlFor="passport-number" className="flex flex-col w-full">
+            Passport number
+            <input
+              value={passportNo}
+              onChange={(e) => setPassportNo(e.target.value)}
+              type="text"
+              id="passport-number"
+              placeholder="Passport number"
+              required
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
+            />
+            {validationErrors.passport_no && (
+              <span className="block italic text-[10px] text-red-600">
+                The passport number field is required
+              </span>
+            )}
+          </label>
+          <label htmlFor="passport-expiry" className="flex flex-col w-full">
+            Expiry date
+            <input
+              value={passportExp}
+              onChange={(e) => setPassportExp(e.target.value)}
+              type="date"
+              id="passport-expiry"
+              placeholder="Passport expiry date"
+              required
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
+            />
+            {validationErrors.passport_exp && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.passport_exp}
+              </span>
+            )}
+          </label>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full my-2">
+          <label className="flex flex-col w-full" htmlFor="gender">
             Gender
             <select
               onChange={(e) => setGender(e.target.value)}
-              className="w-full rounded-md border-2 border-accent">
+              className="py-2 text-sm outline-none border-accent focus:border-accent">
               <option>&mdash; select &mdash;</option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
-          </div>
-          <div className="text-sm my-3 w-full" htmlFor="phone">
+            {validationErrors.gender && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.gender}
+              </span>
+            )}
+          </label>
+          <label className="flex flex-col w-full" htmlFor="phone">
             Date of Birth
             <input
               value={dateOfBirth}
               onChange={(e) => setDateOfBirth(e.target.value)}
               type="date"
               id="passport-expiry"
-              placeholder="Passport expiry date"
-              className="w-full rounded-md border-2 border-accent"
+              placeholder="Date of birth"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
+            {validationErrors.date_of_birth && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.date_of_birth}
+              </span>
+            )}
+          </label>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:gap-4">
-          <div className="text-sm my-3 w-full" htmlFor="password">
+        <small className="block mt-6 mb-2 underline text-gray-700">
+          Setup a password you will remember
+        </small>
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full mb-4">
+          <label className="flex flex-col w-full" htmlFor="password">
             Password
             <input
               type="password"
               value={plainPassword}
               onChange={(e) => setPlainPassword(e.target.value)}
-              className="w-full rounded-md border-2 border-accent"
+              placeholder="Password"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
-          <div className="text-sm my-3 w-full" htmlFor="password">
+            {validationErrors.password && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.password}
+              </span>
+            )}
+          </label>
+          <label className="flex flex-col w-full" htmlFor="password">
             Confirm Password
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-md border-2 border-accent"
+              placeholder="Confirm password"
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
             />
-          </div>
+            {validationErrors.password_confirmation && (
+              <span className="block italic text-[10px] text-red-600">
+                {validationErrors.password_confirmation}
+              </span>
+            )}
+          </label>
         </div>
 
-        <div className="flex flex-col items-end my-4">
-          <button className="bg-primary w-full text-center rounded py-4 text-white hover:bg-opacity-90">
+        <div className="flex items-center gap-2 w-full my-6">
+          <button
+            disabled={isSubmitting}
+            className={`text-center text-lg w-full p-4 rounded-sm ${
+              isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-primary text-white hover:bg-opacity-90"
+            }`}>
             {isSubmitting ? (
-              <div className="text-center rtl:text-left">
-                <div role="status">
-                  <svg
-                    aria-hidden="true"
-                    className="inline w-8 h-8 text-accent animate-spin dark:text-gray-600 fill-primary"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
-                    />
-                  </svg>
-                  <span className="text-sm ml-4">Creating account...</span>
-                  <span className="sr-only">Creating account...</span>
-                </div>
-              </div>
+              <>
+                <FontAwesomeIcon
+                  className="mr-3 animate-spin"
+                  icon={faSpinner}
+                />
+                Processing...
+              </>
             ) : (
-              "Create Account"
+              <>
+                Submit{" "}
+                <FontAwesomeIcon className="ml-3" icon={faArrowRightLong} />
+              </>
             )}
           </button>
         </div>
+
         <small className="text-xs text-center block my-1 font-light text-primary">
           By creating an account, you agree to our{" "}
           <a
             target="_blank"
             className="underline"
-            href="https://salvtec.co.sz/ticketlab/terms"
+            href="/swift_bookings_terms_of_use.pdf"
             rel="noreferrer">
             Terms of Use
           </a>{" "}
           &
-          <a
-            className="underline"
-            href="https://salvtec.co.sz/ticketlab/privacy-policy">
+          <a className="underline" href="/privacy">
             {" "}
             Privacy Policy.
           </a>

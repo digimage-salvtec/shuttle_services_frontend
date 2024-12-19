@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import Bottom from "../components/Bottom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightLong, faMinus, faPlus, faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightLong,
+  faMinus,
+  faPlus,
+  faSpinner,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import axios_client from "../axios_client";
 
 const Passengers = () => {
@@ -14,13 +20,14 @@ const Passengers = () => {
   const paymentmethod_id = params.get("paymentmethod");
   const shuttle_id = params.get("shuttle");
   const cellNumber = params.get("cellNumber");
-  const numberOfPassengers = params.get("passengers");
   const trip_ref = params.get("trip_ref");
   const trip_id = params.get("trip");
+  const numberOfPassengers = params.get("passengers");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(false);
   const [passengerCount, setPassengerCount] = useState(1);
+
   const [passengers, setPassengers] = useState([
     {
       firstname: "",
@@ -200,6 +207,7 @@ const Passengers = () => {
                       name="passportNo"
                       id={`passport-number-${index}`}
                       placeholder="Passport number"
+                      required
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
                     />
                   </label>
@@ -214,6 +222,7 @@ const Passengers = () => {
                       name="passportExp"
                       id={`passport-expiry-${index}`}
                       placeholder="Passport expiry date"
+                      required
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
                     />
                   </label>
@@ -264,15 +273,13 @@ const Passengers = () => {
                 </>
               )}
             </button>
+
+            <hr className="my-4" />
           </form>
         </div>
         <div className="col-span-1 sm:col-span-1 bg-accent rounded-lg p-4 mt-8">
           <table className="w-full text-sm text-left rtl:text-right">
             <tbody>
-              <tr className="odd:bg-gray-200 ">
-                <td className="p-3">Reservation No.</td>
-                <td className="p-3">{reservation_id}</td>
-              </tr>
               <tr className="odd:bg-gray-200 ">
                 <td className="p-3">Trip Ref.</td>
                 <td className="p-3">{trip_ref}</td>

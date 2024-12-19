@@ -1,80 +1,85 @@
 import React, { useState } from "react";
-import logo from "../assets/logo/swift_shuttle_logo_main.png";
+import logo from "../assets/logo/swift_shuttle_logotype_rgb.png";
 import axios_client from "../axios_client";
 import { useStateContext } from "../context/ContextProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
+import Bottom from "../components/Bottom";
 
 const PasswordReset = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-  const [cellNumber, setCellNumber] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
 
   const navigate = useNavigate();
-
-  const { dataDecode } = useStateContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     let payload = {
-      contact: cellNumber,
+      email: emailAddress,
     };
 
     try {
       const { data } = await axios_client.post(
-        "/bridgePasswordReset.php",
+        "/bridgeReceiveForgotPassword.php",
         JSON.stringify(payload)
       );
 
-      const response = dataDecode(data);
-
-      if (response.responseStatus == 200) {
-        setMessage(response.message);
-        navigate("/updatepassword");
+      if (data.message) {
+        setMessage(data.message);
+        setEmailAddress('')
       }
     } catch (error) {
       console.log(error);
-      setMessage("Something went wrong. Contact admin...");
+      setMessage("Something went wrong.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="h-[80vh] flex items-center">
+    <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-lg mx-auto pt-20">
+      <Bottom />
+
+      {message && (
+        <small className="block text-center my-2 border-l-4 border-primary bg-primary bg-opacity-20 p-2">
+          {message}
+        </small>
+      )}
       <form
         onSubmit={handleSubmit}
-        className="border border-accent rounded px-3 py-4 mt-10 mb-2 max-w-sm mx-auto">
-        <h3 className="text-lg text-primary text-center mb-6">
+        className="border border-accent rounded p-4">
+        <h3 className="text-2xl text-primary font-semibold">
           Reset your Password
         </h3>
+        <small className="font-light text-gray-600 text-xs">
+          To reset your password, enter the email address you used at
+          registration
+        </small>
 
-        {message && <small className="block">{message}</small>}
-        <div className="text-sm my-3" htmlFor="username">
-          Cell Number
-          <input
-            type="text"
-            value={cellNumber}
-            onChange={(e) => setCellNumber(e.target.value)}
-            className="w-full rounded border-2 border-accent"
-          />
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full my-4">
+          <label className="flex flex-col w-full" htmlFor="email">
+            Email Address
+            <input
+              type="text"
+              value={emailAddress}
+              onChange={(e) => setEmailAddress(e.target.value)}
+              className="py-2 text-sm outline-none border-accent focus:border-accent"
+            />
+          </label>
         </div>
 
         <div className="flex flex-col items-end">
-          <button className="bg-primary w-full text-center rounded py-2 text-white">
+          <button className="bg-primary w-full text-center rounded py-4 text-white">
             {isSubmitting ? "Verifying..." : "Send Reset Link"}
           </button>
-          <Link
-            to="/login"
-            className="underline text-sm text-primary my-2 mr-1">
-            Login
-            <FontAwesomeIcon icon={faArrowRightLong} className="ml-2" />
-          </Link>
+          
         </div>
       </form>
+      <Bottom />
     </div>
   );
 };

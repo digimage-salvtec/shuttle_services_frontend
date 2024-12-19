@@ -20,10 +20,11 @@ const Trips = () => {
 
   const get_trips = async () => {
     setIsLoading(true);
-    setError("");
     try {
       const { data } = await axios_client.get("/bridgeGetTrips.php");
       setTrips(data.data);
+
+      if (data.data.length <= 0) setError(`No trips just yet.`);
     } catch (err) {
       const error = err.response;
 
@@ -31,7 +32,7 @@ const Trips = () => {
         const validation_errors = error.data.errors;
         navigate("/", { state: { validation_errors } });
       } else {
-        setError("Couldn't load trips. Try again...");
+        setError("A network error occured. We couldn't get trips.");
       }
     } finally {
       setIsLoading(false);

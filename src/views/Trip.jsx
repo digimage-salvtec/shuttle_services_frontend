@@ -40,7 +40,7 @@ const Trip = () => {
   const vehicleImages = {
     Bus: bus,
     Sprinter: sprinter,
-    Sedan: sedan,
+    Private: sedan,
     SUV: suv,
     Family: family,
   };
@@ -262,7 +262,7 @@ const Trip = () => {
 
       if (error.status === 422) {
         const validationErrors = error.data.errors;
-        navigate(`/trip/${trip}`, { state: { validationErrors } }); // Redirect back with errors
+        navigate(`/trip/${trip}`, { state: { validationErrors } });
       } else {
         setError("Error adding trip. Try again...");
       }
@@ -318,6 +318,7 @@ const Trip = () => {
                   {tripData.from}
                 </p>
               </div>
+
               <div className="border-b-2 border-gray-200 flex flex-col w-1/2 sm:w-1/3">
                 <p className="text-gray-500 text-xs underline">
                   <FontAwesomeIcon icon={faLocation} className="mr-2" />
@@ -327,6 +328,7 @@ const Trip = () => {
                   {tripData.to}
                 </p>
               </div>
+
               <div className="border-b-2 border-gray-200 flex flex-col items-center sm:items-start my-2 w-full sm:w-1/3">
                 <p className="text-gray-500 text-xs underline">Pickup Date</p>
                 <p className="text-gray-400 ">
@@ -406,7 +408,7 @@ const Trip = () => {
                   </Link>
                 </div>
 
-                <span className="bg-alt bg-opacity-30 border-l-4 border-red-500 inline-block px-3 py-1 text-xs text-gray-700 mt-1 mb-4">
+                <span className="bg-primary bg-opacity-30 border-l-4 border-primary inline-block px-3 py-1 text-xs text-gray-700 mt-1 mb-4">
                   We will use provided phone number for MoMo payments. Please
                   make sure it's registered, & correct
                 </span>
@@ -492,6 +494,7 @@ const Trip = () => {
                       type="text"
                       id="passport-number"
                       placeholder="Passport number"
+                      required
                       className="py-2 text-sm outline-none border-accent focus:border-accent"
                     />
                     {validationErrors.passport_no && (
@@ -570,7 +573,7 @@ const Trip = () => {
                     disabled={isSubmitting}
                     className={`text-center text-lg w-full p-4 rounded-sm ${
                       isSubmitting
-                        ? "bg-gray-400 cursor-not-allowed" 
+                        ? "bg-gray-400 cursor-not-allowed"
                         : "bg-primary text-white hover:bg-opacity-90"
                     }`}>
                     {isSubmitting ? (

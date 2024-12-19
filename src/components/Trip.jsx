@@ -30,7 +30,7 @@ const Trip = ({ trip }) => {
   const vehicleImages = {
     Bus: bus,
     Sprinter: Sprinter,
-    Sedan: sedan,
+    Private: sedan,
     SUV: suv,
     Family: seven_seater,
   };
@@ -39,26 +39,18 @@ const Trip = ({ trip }) => {
 
   return (
     <div className="rounded-lg shadow-lg py-2 px-6 border-t-2 border-primary ">
-      {trip.pickups ? (
-        <div className="py-2 flex items-center relative text-center">
-          <p className="text-ellipsis text-nowrap overflow-hidden w-full sm:w-1/2 rounded-full bg-accent px-3 py-[1px] text-xs">
-            Pick up from {trip.from}
-          </p>
-        </div>
-      ) : (
-        <div className="py-2 flex items-center relative text-center">
-          <p className="text-ellipsis text-nowrap overflow-hidden w-full sm:w-1/2 rounded-l-full bg-accent px-3 py-[1px] text-xs">
-            {trip.from}
-          </p>
-          <FontAwesomeIcon
-            icon={faArrowRightLong}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-gray-500"
-          />
-          <p className="text-ellipsis text-nowrap overflow-hidden w-full sm:w-1/2 rounded-r-full bg-primary_opac bg-opacity-90 px-3 py-[1px] text-xs">
-            {trip.to}
-          </p>
-        </div>
-      )}
+      <div className="py-2 flex items-center relative text-center">
+        <p className="text-ellipsis text-nowrap overflow-hidden w-full sm:w-1/2 rounded-l-full bg-accent px-3 py-[2px] text-xs">
+          {trip.from}
+        </p>
+        <FontAwesomeIcon
+          icon={faArrowRightLong}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-gray-500"
+        />
+        <p className="text-ellipsis text-nowrap overflow-hidden w-full sm:w-1/2 rounded-r-full bg-primary_opac bg-opacity-90 px-3 py-[2px] text-xs">
+          {trip.to}
+        </p>
+      </div>
 
       <div className="flex flex-wrap pb-2">
         <div className="w-2/5 sm:w-1/5">
@@ -77,6 +69,7 @@ const Trip = ({ trip }) => {
             <p className="border-[1px] border-primary text-primary rounded text-[10px] sm:text-xs px-2">
               {trip?.shuttle?.type}
             </p>
+
             {!trip.pickups && (
               <div className="mx-2 gap-1 text-ellipsis text-nowrap overflow-hidden">
                 <FontAwesomeIcon
@@ -89,7 +82,9 @@ const Trip = ({ trip }) => {
               </div>
             )}
           </div>
-          <span className="text-xs font-light italic">Local Transfer</span>
+          <span className="text-xs font-light italic">
+            {trip?.category?.cat_name}
+          </span>
           <div className="flex items-center">
             <img
               className="inline"
@@ -107,24 +102,22 @@ const Trip = ({ trip }) => {
               </small>
             )}
           </div>
-          {!trip.pickups && (
-            <small className="mt-2 block font-light underline">
-              Leaves <DateFormatter dateString={trip.pickupdate} />
-            </small>
-          )}
         </div>
 
         <div className="w-full sm:w-2/5 mt-5 sm:mt-0  flex flex-col items-start sm:items-end justify-between">
           <h2 className="text-primary font-bold text-2xl">
             {formatCurrency(trip.fee)}
           </h2>
-          <p className="text-xs font-light my-3">
-            Free cancellation up to {trip?.provider?.cancellation_policy} hrs
-          </p>
+          {trip.pickups === 0 && (
+            <small className="my-2 block font-light underline">
+              Leaves <DateFormatter dateString={trip.pickupdate} />
+            </small>
+          )}
+
           <Link
             to={`/trip/${trip.trip_reference}`}
             onClick={() => addReservation(trip)}
-            className="w-full text-center bg-alt rounded-full px-4 font-semibold py-2 text-gray-900 hover:bg-opacity-80">
+            className="mt-4 w-full sm:w-2/3 text-center bg-alt rounded-full px-4 font-semibold py-2 text-gray-700 hover:bg-opacity-70">
             Book Now
           </Link>
         </div>

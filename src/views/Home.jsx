@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useStateContext } from "../context/ContextProvider";
 import hero_image from "../assets/shuttle_services_hero_alt.png";
 import artwork from "../assets/deco-brush.svg";
 import GeoCodingForm from "../components/GeoCodingForm";
@@ -9,8 +8,6 @@ import Loading from "../components/Loading";
 import axios_client from "../axios_client";
 
 const Home = () => {
-  const { user, token } = useStateContext();
-
   const [trips, setTrips] = useState([]);
 
   const [error, setError] = useState("");
@@ -38,13 +35,13 @@ const Home = () => {
     setError("");
     try {
       const { data } = await axios_client.get("/bridgeGetTrips.php");
+      
       setTrips(data.data);
 
-      if(data.data.length <= 0)
-        setError('No Trips Found')
+      if (data.data.length <= 0) setError(`No trips just yet.`);
     } catch (err) {
       console.log(err);
-      if (err.code === "ERR_NETWORK") setError("Network error");
+      if (err.code === "ERR_NETWORK") setError("A network error occured. We couldn't get trips.");
     } finally {
       setIsLoading(false);
     }
@@ -184,7 +181,7 @@ const Home = () => {
             </h2>
             <p className="my-5 font-light text-gray-700 text-3xl">
               Expand your reach and let travellers find you with ease. Get
-              listed on Swift Shuttle today
+              listed on Swift Bookings today
             </p>
 
             <Link

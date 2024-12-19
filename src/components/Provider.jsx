@@ -1,18 +1,13 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowRightLong,
   faCab,
-  faClockFour,
   faEnvelope,
   faGlobe,
-  faGlobeAfrica,
   faLocationPin,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import provider_img from "../assets/unknown_provider_thumbnail.svg";
-import TimeConverter from "./TimeConverter";
-import { DateFormatter } from "./DateFormatter";
 
 const Provider = ({ provider }) => {
   return (
@@ -34,13 +29,13 @@ const Provider = ({ provider }) => {
         <div className="mt-3 px-2 pt-1 border-t-[1px] border-accent rounded">
           <p className="text-[10px]">Book directly</p>
           <div className="flex items-center gap-6">
-            <a href={`mailto:${provider.email}`}>
+            <a href="mailto:swiftshuttle@salvsystems.com">
               <FontAwesomeIcon
                 icon={faEnvelope}
                 className="text-sm text-primary hover:text-alt"
               />
             </a>
-            <a href={`tel:${provider.contact}`}>
+            <a href="tel:+268 2404 0524">
               <FontAwesomeIcon
                 icon={faPhone}
                 className="text-sm text-primary hover:text-alt"

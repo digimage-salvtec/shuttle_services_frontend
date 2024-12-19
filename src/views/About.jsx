@@ -12,7 +12,9 @@ const About = () => {
     <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
       <Bottom />
       <div className="flex justify-between items-center mt-8">
-        <h3 className="text-sm sm:text-2xl font-bold">Powered by Digimage (Pty) Ltd</h3>
+        <h3 className="text-sm sm:text-2xl font-bold">
+          Powered by Digimage (Pty) Ltd
+        </h3>
       </div>
       <hr className="h-px border-0 bg-accent my-1" />
 
@@ -24,7 +26,7 @@ const About = () => {
         </p>
       </div>
       <hr className="h-px border-0 bg-accent my-4 w-full sm:w-1/2" />
-      <p className="my-1 font-light text-xs sm:text-sm text-justify w-2/3">
+      <p className="my-1 font-light text-xs sm:text-sm text-justify w-full sm:w-2/3">
         Our primary goal is customer satisfaction. If you have any suggestion
         on, are not satisfied, or you are displeased by the quality of the this
         product, we are always ready to assist accordingly. Reach out to us on
@@ -77,22 +79,17 @@ const About = () => {
         </div>
       </div>
 
-      <div className="inline-flex items-center justify-center w-full">
-        <hr className="w-full h-1 my-8 bg-gray-200 border-0 rounded dark:bg-gray-700" />
-        <div className="absolute px-4 -translate-x-1/2 bg-white left-1/2 dark:bg-gray-900">
-          or
-        </div>
-      </div>
+      <hr className="h-px border-0 bg-accent my-4 w-full sm:w-1/2" />
 
-      <div className="mt-1">
-        <p className="text-center font-light">Visit our Offices</p>
-        <p className="text-center text-xs sm:text-lg mt-2 font-light">
+      <div className="my-4">
+        <p className="text-left font-light underline">Visit our Offices</p>
+        <p className="text-left text-xs sm:text-lg mt-2 font-light">
           Office #54 Mbandzeni House, Karl Grant St, Mbabane
         </p>
         <a
           target="_blank"
           href="https://maps.app.goo.gl/wsL9rzwXUDNeRnET9"
-          className="w-full sm:w-1/2 block p-4 my-4 mb-4 bg-primary text-center mx-auto text-white text-lg cursor-pointer"
+          className="w-full sm:w-1/3 block p-4 my-4 mb-4 bg-primary text-center text-white text-lg cursor-pointer"
           rel="noreferrer">
           Locate on Google Maps
         </a>

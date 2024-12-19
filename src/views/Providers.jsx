@@ -18,8 +18,8 @@ const Providers = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const searchForProvider = (e) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   const get_providers = async () => {
     setIsLoading(true);
@@ -27,9 +27,9 @@ const Providers = () => {
     try {
       const { data } = await axios_client.get("/bridgeGetProviders.php");
       setProviders(data.data);
-      console.log(providers)
+      console.log(providers);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       const error = err.response;
 
       if (error.status === 422) {
@@ -54,15 +54,25 @@ const Providers = () => {
       <div className="py-4 mt-6">
         <div className="relative max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto ">
           <p className="text-center text-md sm:text-3xl text-primary w-1/2 mx-auto">
-          Book Your Airport Shuttle, Local Transfer or Cross-border transport with Swift Shuttle
+            Book Your Airport Shuttle, Local Transfer or Cross-border transport
+            with Swift Bookings
           </p>
         </div>
       </div>
       <div className="py-2 bg-primary">
         <div className="text-white max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto flex flex-col sm:flex-row items-center justify-between">
-          <form onSubmit={searchForProvider} className="relative" >
-            <input type="search" name="search" id="search" placeholder="Search providers..." className="text-sm bg-primary_opac rounded-full border-none py-1 text-white" />
-            <FontAwesomeIcon icon={faSearch} className="absolute right-0 top-1/2 -translate-y-1/2 mr-4"/>
+          <form onSubmit={searchForProvider} className="relative">
+            <input
+              type="search"
+              name="search"
+              id="search"
+              placeholder="Search providers..."
+              className="text-sm bg-primary_opac rounded-full border-none py-1 text-white"
+            />
+            <FontAwesomeIcon
+              icon={faSearch}
+              className="absolute right-0 top-1/2 -translate-y-1/2 mr-4"
+            />
           </form>
           <ShareButton />
         </div>
@@ -81,7 +91,9 @@ const Providers = () => {
         <div className="max-w-95p 2xs:max-w-90p xs:max-w-85p sm:max-w-85p md:max-w-80p xl:max-w-75p mx-auto">
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 auto-cols-fr gap-8">
             {providers.length > 0 &&
-              providers.map((provider, index) => <Provider key={index} provider={provider} />)}
+              providers.map((provider, index) => (
+                <Provider key={index} provider={provider} />
+              ))}
           </div>
         </div>
       )}

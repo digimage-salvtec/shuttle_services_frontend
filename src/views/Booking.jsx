@@ -94,8 +94,7 @@ const Booking = () => {
 
     setState((prev) => ({ ...prev, loading: true }));
 
-    // const totalToPay = reservation.seats_reserved * reservation.trip.trip_cost;
-    const totalToPay = 0.01;
+    const totalToPay = reservation.seats_reserved * reservation.trip.trip_cost;
 
     let payload = {
       shuttle_id: reservation.shuttle_id,
@@ -115,6 +114,7 @@ const Booking = () => {
     };
 
     payload = JSON.stringify(payload);
+
     try {
       const response = await axios_client.post(
         "/bridgeReceiveBooking.php",
@@ -191,10 +191,9 @@ const Booking = () => {
     message,
   } = state;
 
-  // const totalToPay = reservation
-  //   ? reservation.seats_reserved * reservation.trip.trip_cost
-  //   : 0;
-  const totalToPay = 0.01;
+  const totalToPay = reservation
+    ? reservation.seats_reserved * reservation.trip.trip_cost
+    : 0;
 
   let gatewayLink = `https://www.epaynetsz.com/ePayNetCart/gt00001.php?c=39303530&2c=37&3c=3132&tb=${totalToPay}&tn=${reservation?.reservation_no}`;
 
@@ -211,7 +210,7 @@ const Booking = () => {
       )}
 
       <p className="text-center text-primary text-2xl font-bold mt-4">
-        Review Booking & Pay
+        Review your Booking & Pay
       </p>
       <hr className="my-4" />
 
@@ -309,15 +308,12 @@ const Booking = () => {
             <button
               className="underline text-red-700 hover:text-red-500 text-sm mt-8"
               onClick={handleCancelBooking}>
-              Cancel
+              Cancel this process
             </button>
           </div>
           <div className="col-span-1 sm:col-span-2 rounded shadow-lg p-4">
             <p className="text-primary font-semibold text-lg ">
-              Paying with{" "}
-              <span className="bg-accent text-gray-700 px-2">
-                {paymentMethod?.name}
-              </span>
+              Paying with {paymentMethod?.name}
             </p>
             {paymentMethod?.description && (
               <small className="text-xs italic">
@@ -344,7 +340,7 @@ const Booking = () => {
                     <th
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      Total Passengers
+                      Total Seats Reserved
                     </th>
                     <td className="px-6 py-4">{reservation?.seats_reserved}</td>
                   </tr>
@@ -377,7 +373,7 @@ const Booking = () => {
                   href="https://www.epaynetsz.com/ePayNetWeb/"
                   target="_blank"
                   rel="noopener noreferrer">
-                  Create Account Here
+                  Create an account here
                 </a>
               </small>
             )}
